@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DRIFF | WRITER</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  .header {
+    color:green;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  body {
+    background-color:black;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #fff;
+    font-family: 'Courier New', Courier, monospace;
+    padding-top: 50px;
+  }
+  .terminal {
+    background: transparent;
+    border-radius: 6px;
+    padding: 15px;
+    margin: 0 auto;
+    max-width: 600px;
+    font-family: 'Courier New', Courier, monospace; /* default font */
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>DRIFF26</h1>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="terminal">
+        <pre id="output"></pre>
+        <input type="text" class="form-control" id="input" placeholder="Tulis sesuatu ...">
+        <button class="btn btn-primary mt-3" onclick="writeToTerminal()">Tulis</button>
+        <button class="btn btn-success mt-3" onclick="downloadImage()">Download Gambar</button>
+        <button class="btn btn-info mt-3" onclick="saveText()">Simpan Text</button>
+        <div class="mt-3">
+          <label for="color">Warna Terminal :</label>
+          <select class="form-select" id="color">
+            <option value="#0d1117">Hitam</option>
+            <option value="#212529">Putih</option>
+            <option value="#007bff">Biru</option>
+            <option value="#28a745">Hijau</option>
+            <option value="#6c757d">Abu abu</option>
+          </select>
+          <label for="font">Gaya Font :</label>
+          <select class="form-select" id="font">
+            <option value="'Courier New', Courier, monospace">Courier New</option>
+            <option value="'Arial', sans-serif">Arial</option>
+            <option value="'Times New Roman', Times, serif">Times New Roman</option>
+            <option value="'Helvetica', sans-serif">Helvetica</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+<script>
+  function writeToTerminal() {
+    let inputText = document.getElementById('input').value;
+    let outputElement = document.getElementById('output');
+    outputElement.innerHTML += inputText + '\n';
+  }
+
+  function downloadImage() {
+    html2canvas(document.querySelector('.terminal'), {backgroundColor: null}).then(canvas => {
+      let link = document.createElement('a');
+      link.download = 'terminal_image.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+  }
+
+  function saveText() {
+    let outputText = document.getElementById('output').innerText;
+    let blob = new Blob([outputText], { type: 'text/plain' });
+    let link = document.createElement('a');
+    link.download = 'terminal_output.txt';
+    link.href = window.URL.createObjectURL(blob);
+    link.click();
+  }
+
+  document.getElementById('color').addEventListener('change', function() {
+    let color = this.value;
+    document.querySelector('.terminal').style.backgroundColor = color;
+  });
+
+  document.getElementById('font').addEventListener('change', function() {
+    let font = this.value;
+    document.querySelector('.terminal').style.fontFamily = font;
+    document.getElementById('output').style.fontFamily = font; // Update font inside terminal
+  });
+</script>
+</body>
+</html>
