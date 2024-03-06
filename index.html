@@ -40,7 +40,9 @@
         <pre id="output"></pre>
         <input type="text" class="form-control" id="input" placeholder="Tulis sesuatu ...">
         <button class="btn btn-primary mt-3" onclick="writeToTerminal()">Tulis</button>
-        <button class="btn btn-success mt-3" onclick="downloadImage()">Download Gambar</button>
+        <button class="btn btn-danger mt-3" onclick="clearTerminal()">Hapus</button>
+        <button class="btn btn-success mt-3" onclick="convertToImage()">Konversi ke Gambar</button>
+        <button class="btn btn-info mt-3" onclick="downloadImage()">Download Gambar</button>
         <button class="btn btn-info mt-3" onclick="saveText()">Simpan Text</button>
         <div class="mt-3">
           <label for="color">Warna Terminal :</label>
@@ -73,14 +75,25 @@
     outputElement.innerHTML += inputText + '\n';
   }
 
-  function downloadImage() {
+  function clearTerminal() {
+    document.getElementById('output').innerText = '';
+  }
+
+  function convertToImage() {
     html2canvas(document.querySelector('.terminal'), {backgroundColor: null}).then(canvas => {
-      let imageData = canvas.toDataURL();
+      document.querySelector('.terminal').innerHTML = '';
+      document.querySelector('.terminal').appendChild(canvas);
+    });
+  }
+
+  function downloadImage() {
+    let canvas = document.querySelector('canvas');
+    if (canvas) {
       let link = document.createElement('a');
       link.download = 'terminal_image.png';
-      link.href = imageData;
+      link.href = canvas.toDataURL();
       link.click();
-    });
+    }
   }
 
   function saveText() {
