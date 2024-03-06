@@ -75,9 +75,10 @@
 
   function downloadImage() {
     html2canvas(document.querySelector('.terminal'), {backgroundColor: null}).then(canvas => {
+      let imageData = canvas.toDataURL();
       let link = document.createElement('a');
       link.download = 'terminal_image.png';
-      link.href = canvas.toDataURL();
+      link.href = imageData;
       link.click();
     });
   }
